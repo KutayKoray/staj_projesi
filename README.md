@@ -17,7 +17,7 @@ Zeynep
 
 ## Proje durumu ve belgeleri
 - Projeye başlarken kullanılacak belgeler
-    -  ✅ [Proje / konu isterleri ve önerileri (Requests for Comments (RFC))](RFC/readme.md) 
+    -  ✅ [Proje / konu isterleri ve önerileri (Requests for Comments (RFC))](RFC) 
   
   
 <h2>🧐 Features</h2>
