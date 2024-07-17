@@ -13,10 +13,11 @@ async function fetchUsers() {
             const row = document.createElement('tr');
 
             row.innerHTML = `
+                <td>${user.user_id}</td>
                 <td>${user.name || ''}</td>
                 <td>${user.surname || ''}</td>
                 <td>${user.username || ''}</td>
-                <td>${user.e_mail || ''}</td>
+                <td>${user.email || ''}</td>
                 <td>${user.is_teacher ? 'Teacher' : 'Student'}</td>
                 <td>${user.total_question || 0}</td>
                 <td>${user.correct_answer || 0}</td>

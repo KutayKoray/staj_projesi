@@ -1,3 +1,7 @@
+document.getElementById('registerBtn').addEventListener('click', () => {
+    window.location.href = 'http://localhost:5500/web/register.html';
+});
+
 const loginForm = document.getElementById('login-form');
 
         loginForm.addEventListener('submit', async (event) => {
@@ -25,3 +29,4 @@ const loginForm = document.getElementById('login-form');
                 alert('Login failed');
             }
         });
+

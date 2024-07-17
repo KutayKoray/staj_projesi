@@ -1,3 +1,67 @@
+function updateSoruTuru() {
+    var alanBilgisi = document.getElementById('alan_bilgisi').value;
+    var soruTuruSelect = document.getElementById('soru_turu');
+    var soruDersiSelect = document.getElementById('soru_dersi');
+
+    soruTuruSelect.innerHTML = '<option value="" disabled selected>Soru türü seçiniz</option>';
+    soruDersiSelect.innerHTML = '<option value="" disabled selected>Soru dersi seçiniz</option>';
+
+    if (alanBilgisi === 'TYT') {
+        soruTuruSelect.options.add(new Option('Türkçe', 'turkce_tyt'));
+        soruTuruSelect.options.add(new Option('Sosyal Bilimler', 'sosyal_bilimler_tyt'));
+        soruTuruSelect.options.add(new Option('Matematik', 'matematik_tyt'));
+        soruTuruSelect.options.add(new Option('Fen Bilimleri', 'fen_bilimleri_tyt'));
+    } else if (alanBilgisi === 'AYT') {
+        soruTuruSelect.options.add(new Option('Türk Dili ve Sosyal Bilimleri', 'turk_dili_ve_sosyal_bilimleri_ayt'));
+        soruTuruSelect.options.add(new Option('Sosyal Bilimler', 'sosyal_bilimler_ayt'));
+        soruTuruSelect.options.add(new Option('Matematik', 'matematik_ayt'));
+        soruTuruSelect.options.add(new Option('Fen Bilimleri', 'fen_bilimleri_ayt'));
+    }
+
+    soruTuruSelect.addEventListener('change', function() {
+        var soruTuru = soruTuruSelect.value;
+        soruDersiSelect.innerHTML = '<option value="" disabled selected>Soru dersi seçiniz</option>';
+        
+        if (soruTuru === 'turkce_tyt') {
+            soruDersiSelect.options.add(new Option('Türkçe', 'turkce_tyt'));
+        } else if (soruTuru === 'sosyal_bilimler_tyt') {
+            soruDersiSelect.options.add(new Option('Tarih', 'tarih_tyt'));
+            soruDersiSelect.options.add(new Option('Coğrafya', 'cografya_tyt'));
+            soruDersiSelect.options.add(new Option('Din Kültürü', 'din_kulturu_tyt'));
+            soruDersiSelect.options.add(new Option('Felsefe', 'felsefe_tyt'));
+        }
+        else if (soruTuru === 'matematik_tyt') {
+            soruDersiSelect.options.add(new Option('Matematik', 'matematik_tyt'));
+        }
+        else if (soruTuru === 'fen_bilimleri_tyt') {
+            soruDersiSelect.options.add(new Option('Fizik', 'fizik_tyt'));
+            soruDersiSelect.options.add(new Option('Kimya', 'kimya_tyt'));
+            soruDersiSelect.options.add(new Option('Biyoloji', 'biyoloji_tyt'));
+        }
+        else if (soruTuru === 'turk_dili_ve_sosyal_bilimleri_ayt') {
+            soruDersiSelect.options.add(new Option('Türk Dili ve Edebiyatı', 'turk_dili_ve_edebiyati_ayt'));
+            soruDersiSelect.options.add(new Option('Tarih', 'tarih_ayt'));
+            soruDersiSelect.options.add(new Option('Coğrafya', 'cografya_ayt'));
+            soruDersiSelect.options.add(new Option('Felsefe', 'felsefe_ayt'));
+            soruDersiSelect.options.add(new Option('Din Kültürü', 'din_kulturu_ayt'));
+        }
+        else if (soruTuru === 'sosyal_bilimler_ayt') {
+            soruDersiSelect.options.add(new Option('Tarih', 'tarih_ayt'));
+            soruDersiSelect.options.add(new Option('Coğrafya', 'cografya_ayt'));
+            soruDersiSelect.options.add(new Option('Felsefe', 'felsefe_ayt'));
+            soruDersiSelect.options.add(new Option('Din Kültürü', 'din_kulturu_ayt'));
+        }
+        else if (soruTuru === 'matematik_ayt') {
+            soruDersiSelect.options.add(new Option('Matematik', 'matematik_ayt'));
+        }
+        else if (soruTuru === 'fen_bilimleri_ayt') {
+            soruDersiSelect.options.add(new Option('Fizik', 'fizik_ayt'));
+            soruDersiSelect.options.add(new Option('Kimya', 'kimya_ayt'));
+            soruDersiSelect.options.add(new Option('Biyoloji', 'biyoloji_ayt'));
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const categoryContainer = document.getElementById('categoryContainer');
     const questionsContainer = document.getElementById('questionsContainer');
@@ -15,108 +79,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let correctAnswers = 0;
     let wrongAnswers = 0;
 
+    
+
     categoryContainer.addEventListener('click', async (event) => {
         if (event.target.classList.contains('category')) {
             const category = event.target.dataset.category;
             categoryTitle.textContent = category;
+            
+            // Hangi soru_turu seçecek sor
 
-            try {
-                const response = await fetch(`http://localhost:8000/questions/category/${category}`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                questions = await response.json();
+}});
 
-                categoryContainer.style.display = 'none';
-                questionsContainer.style.display = 'flex';
 
-                currentQuestionIndex = getRandomInt(questions.length);
-                score = 0;
-                showQuestion();
-            } catch (error) {
-                console.error('Error fetching questions:', error);
-                alert('An error occurred while fetching the questions.');
-            }
-        }
-    });
 
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
+            
 
-    function showQuestion() {
-        totalQuestions++;
-        if (currentQuestionIndex >= questions.length) {
-            endQuiz();
-            return;
-        }
+    
 
-        const question = questions[currentQuestionIndex];
-        questionList.innerHTML = '';
+    
 
-        const questionItem = document.createElement('div');
-        questionItem.classList.add('question');
-        questionItem.dataset.id = question.id;
-        questionItem.innerHTML = `
-            <h3>${question.soru}</h3>
-            <button onclick="checkAnswer('A')">A: ${question.a}</button>
-            <button onclick="checkAnswer('B')">B: ${question.b}</button>
-            <button onclick="checkAnswer('C')">C: ${question.c}</button>
-            <button onclick="checkAnswer('D')">D: ${question.d}</button>
-            <div id="timer">Kalan Süre: ${QUESTION_TIME}</div>
-        `;
-        questionList.appendChild(questionItem);
+    
+    
 
-        startTimer();
-    }
+    
 
-    function startTimer() {
-        let timeLeft = QUESTION_TIME;
-        clearInterval(timer);
-        timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').textContent = `Kalan Süre: ${timeLeft}`;
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                alert('Süre doldu!');
-                endQuiz();
-            }
-        }, 1000);
-    }
-
-    window.checkAnswer = function(selectedAnswer) {
-        clearInterval(timer);
-        const currentQuestion = questions[currentQuestionIndex];
-        if (selectedAnswer === currentQuestion.correct_answer) {
-            score += CORRECT_ANSWER_POINTS;
-            alert('Doğru cevap!');
-            currentQuestionIndex = getRandomInt(questions.length);
-            showQuestion();
-        } else {
-            alert('Yanlış cevap. Quiz bitti.'); 
-            endQuiz();
-        }
-    }
-
-    function endQuiz() {
-        correctAnswers = score / CORRECT_ANSWER_POINTS;
-        wrongAnswers = totalQuestions - correctAnswers;
-
-        questionList.innerHTML = `
-            <h2>Quiz Bitti!</h2>
-            <p id="score">Toplam Puanınız: ${score}  - ${user}</p>
-        `;
-
-        update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user);
-
-        // Quiz bittiğinde kategori seçimine dönme seçeneği ekleyebilirsiniz
-        const restartButton = document.createElement('button');
-        restartButton.textContent = 'Yeni Kategori Seç';
-        restartButton.onclick = () => {
-            categoryContainer.style.display = 'flex';
-            questionsContainer.style.display = 'none';
-        };
-        questionList.appendChild(restartButton);
-    }
-});
+    
 
 function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user) {
     fetch(`http://localhost:8000/users/${user}/score`, {
@@ -146,3 +133,7 @@ function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, 
         alert('Kullanıcı istatistikleri güncellenirken bir hata oluştu.');
     });
 }
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}});

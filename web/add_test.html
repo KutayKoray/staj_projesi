@@ -4,42 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soru Ekle</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style/add_test.css">
 </head>
 <body>
-    <div class="question-form-container">
-        <h2>Soru Ekle</h2>
-        <div class="form-group">
-            <label for="alan_bilgisi">1. Alan Seçiniz:</label>
-            <select id="alan_bilgisi" name="alan_bilgisi" onchange="updateSoruTuru()">
-                <option value="" disabled selected>TYT mi AYT mi seçiniz</option>
-                <option value="TYT">TYT</option>
-                <option value="AYT">AYT</option>
-            </select>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Soru Ekle</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="alan_bilgisi">1. Alan Seçiniz:</label>
+                                <select class="form-control" id="alan_bilgisi" name="alan_bilgisi" onchange="updateSoruTuru()">
+                                    <option value="" disabled selected>TYT mi AYT mi seçiniz</option>
+                                    <option value="TYT">TYT</option>
+                                    <option value="AYT">AYT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="soru_turu">2. Soru Türü Seçiniz:</label>
+                                <select class="form-control" id="soru_turu" name="soru_turu">
+                                    <option value="" disabled selected>Soru türü seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="soru_dersi">3. Soru Dersini Seçiniz:</label>
+                                <select class="form-control" id="soru_dersi" name="soru_dersi">
+                                    <option value="" disabled selected>Soru dersi seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dosya_yukle">Resim Yükle (Sadece resim dosyaları):</label>
+                                <input type="file" class="form-control-file" id="dosya_yukle" name="dosya_yukle" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label for="dogru_cevap">Doğru Cevap:</label>
+                                <input type="text" class="form-control" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
+                            </div>
+                            <button type="button" class="btn btn-primary" id="submitBtn">Soruyu Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="soru_turu">2. Soru Türü Seçiniz:</label>
-            <select id="soru_turu" name="soru_turu">
-                <option value="" disabled selected>Soru türü seçiniz</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="soru_dersi">3. Soru Dersini Seçiniz:</label>
-            <select id="soru_dersi" name="soru_dersi">
-                <option value="" disabled selected>Soru dersi seçiniz</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="dosya_yukle">Resim Yükle (Sadece resim dosyaları):</label>
-            <input type="file" id="dosya_yukle" name="dosya_yukle" accept="image/*">
-        </div>
-        <div class="form-group">
-            <label for="dogru_cevap">Doğru Cevap:</label>
-            <input type="text" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
-        </div>
-        <button id="submitBtn">Soruyu Ekle</button>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script/add_test.js"></script>
 </body>
 </html>

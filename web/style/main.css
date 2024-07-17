@@ -19,14 +19,15 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 10%;
+    min-height: 500px;
 }
 
 .profile-container {
-    width: 40%;
+    width: 50%;
 }
 
 .question-form-container {
-    width: 50%;
+    width: 100%;
 }
 
 .questions-container {
@@ -37,7 +38,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     overflow-y: auto;  
-    max-height: 350px;  
+    max-height: 400px;  
 }
 
 h1 {

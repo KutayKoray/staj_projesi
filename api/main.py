@@ -41,6 +41,7 @@ class UserModel(Base):
     surname = Column(String)
     e_mail = Column(String)
     is_teacher = Column(Boolean, default=0)
+    is_student = Column(Boolean, default=1)
     total_question = Column(Integer, default=0)
     correct_answer = Column(Integer, default=0)
     wrong_answer = Column(Integer, default=0)
@@ -59,8 +60,11 @@ class LoginUser(BaseModel):
 class RegisterUser(LoginUser):
     name: str
     surname: str
+    username: str
     e_mail: str
     is_teacher: bool
+    is_student: bool
+    password: str
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str

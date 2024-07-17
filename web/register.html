@@ -3,57 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/register.css">
     <title>Register</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-        input[type="text"], input[type="password"], input[type="email"], input[type="radio"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="radio"] {
-            width: auto;
-            margin-right: 10px;
-        }
-        button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -75,10 +26,19 @@
             <input type="email" id="e_mail" name="e_mail" required>
 
             <label>Role:</label>
-            <input type="radio" id="is_teacher" name="role" value="teacher" required>
-            <label for="is_teacher">Teacher</label>
+            <div class="role">
+                <div class="role_alt">
+                    <input type="radio" id="is_teacher" name="role" value="teacher" required>
+                    <label for="is_teacher">Teacher</label>
+                </div>
+                <div class="role_alt">
+                    <input type="radio" id="is_student" name="role" value="student" required>
+                    <label for="is_teacher">Student</label>
+                </div>
+            </div>
+            
 
-            <button type="button" onclick="registerUser()">Register</button>
+            <button type="button" type="submit">Register</button>
         </form>
     </div>
 

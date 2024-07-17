@@ -49,3 +49,8 @@ body {
 .login-form button:hover {
     background-color: #45a049;
 }
+
+#registerBtn {
+    margin-top: 10px;
+    background-color: #008CBA;
+}

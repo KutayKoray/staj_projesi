@@ -25,66 +25,6 @@ async function fetchProfile() {
     }
 }
 
-
-document.getElementById('questionForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const username = localStorage.getItem('username');
-    try {
-        const response = await fetch("http://localhost:8000/users/" + username, {
-            method: 'GET',
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-    const user = await response.json();
-    if (!user.is_teacher) {
-        document.getElementById('message').textContent = 'Sadece öğretmenler soru ekleyebilir!';
-        return;
-    }
-    } catch (error) {
-        console.error('Error fetching user:', error);
-        alert('Kullanıcı bilgileri alınırken bir hata oluştu.');
-        return;
-    }
-    
-    
-    const formData = new FormData(event.target);
-    const data = {
-        soru_turu: formData.get('soru_turu'),
-        soru: formData.get('soru'),
-        a: formData.get('a'),
-        b: formData.get('b'),
-        c: formData.get('c'),
-        d: formData.get('d'),
-        correct_answer: formData.get('correct_answer')
-    };
-    
-    try {
-        const response = await fetch('http://localhost:8000/questions/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            document.getElementById('message').textContent = 'Soru başarıyla eklendi!';
-            loadQuestions();
-        } else {
-            document.getElementById('message').textContent = 'Soru eklenirken bir hata oluştu: ' + result.detail;
-        }
-    } catch (error) {
-        console.error('Error adding question:', error);
-        alert('Soru eklenirken bir hata oluştu.');
-    }
-});
-
 async function loadQuestions() {
     try {
         const response = await fetch('http://localhost:8000/questions/');
@@ -98,12 +38,11 @@ async function loadQuestions() {
             card.className = 'question-card';
             
             card.innerHTML = `
+                <h3>id = ${question.soru_id}</h3>
+                <h3>${question.alan_bilgisi}</h3>
                 <h3>${question.soru_turu}</h3>
-                <h3>${question.soru}</h3>
-                <p>A: ${question.a}</p>
-                <p>B: ${question.b}</p>
-                <p>C: ${question.c}</p>
-                <p>D: ${question.d}</p>
+                <h3>${question.soru_dersi}</h3>
+                <p>${question.image_file_name}</p>
                 <p>Doğru Cevap: ${question.correct_answer}</p>
             `;
             
@@ -123,5 +62,10 @@ window.onload = async function() {
 
 document.getElementById('soruCozButton').addEventListener('click', function() {
     const page = '/web/quiz.html';
+    window.location.href = page;
+});
+
+document.getElementById('addTestButton').addEventListener('click', function() {
+    const page = '/web/add_test.html';
     window.location.href = page;
 });
