@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soru Ekle</title>
+    <link rel="stylesheet" href="style/add_test.css">
+</head>
+<body>
+    <div class="question-form-container">
+        <h2>Soru Ekle</h2>
+        <div class="form-group">
+            <label for="alan_bilgisi">1. Alan Seçiniz:</label>
+            <select id="alan_bilgisi" name="alan_bilgisi" onchange="updateSoruTuru()">
+                <option value="" disabled selected>TYT mi AYT mi seçiniz</option>
+                <option value="TYT">TYT</option>
+                <option value="AYT">AYT</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="soru_turu">2. Soru Türü Seçiniz:</label>
+            <select id="soru_turu" name="soru_turu">
+                <option value="" disabled selected>Soru türü seçiniz</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="soru_dersi">3. Soru Dersini Seçiniz:</label>
+            <select id="soru_dersi" name="soru_dersi">
+                <option value="" disabled selected>Soru dersi seçiniz</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dosya_yukle">Resim Yükle (Sadece resim dosyaları):</label>
+            <input type="file" id="dosya_yukle" name="dosya_yukle" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label for="dogru_cevap">Doğru Cevap:</label>
+            <input type="text" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
+        </div>
+        <button id="submitBtn">Soruyu Ekle</button>
+    </div>
+
+    <script src="script/add_test.js"></script>
+</body>
+</html>
