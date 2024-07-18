@@ -49,6 +49,8 @@ async function getQuestionById(soruId) {
 
         console.log('question:', question);
 
+        displayQuestion(question);
+
     } catch (error) {
         console.error('Hata:', error);
         document.getElementById('questionResult').innerText = error.message;
@@ -58,7 +60,15 @@ async function getQuestionById(soruId) {
 
 
 // -sorular ekrana yazdırılacak
-
+function displayQuestion(question) {
+    const questionContainer = document.getElementById('question');
+    questionContainer.innerHTML = `
+        <img src="./uploads/${question.image_file_name}" 
+             alt="Soru resmi" 
+             onerror="this.onerror=null; this.src='path/to/error/image.jpg'; this.alt='Resim yüklenemedi';"
+             style="width: 100%; height: auto;">
+    `;
+}
 
 
 // -kullanıcın işaretlediği cevaplar alınacak kaydedilecek sınav bittiğinde kontrol edilip doğru ve yanlış scor sayısı belirlenecek. Bunun için bir veri tipi oluşturulacak her sorunun id'si, sorunun correct_answer bilgisi ve kullanıcın işaretlediği cevaplar bu veri tipine kaydedilecek ve bu veri tipini tutacak bir liste oluşturulacak. En sonda bu liste ile doğru ve yanlış sayısı belirlenecek.
