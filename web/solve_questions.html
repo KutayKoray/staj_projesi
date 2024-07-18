@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve Questions</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/solve_questions.css">
+</head>
+<body>
+    
+    <div class="container quiz-container">
+        <div class="question" id="question">Soru</div>
+        <div class="options">
+            <button class="btn btn-outline-primary" id="optionA">A</button>
+            <button class="btn btn-outline-primary" id="optionB">B</button>
+            <button class="btn btn-outline-primary" id="optionC">C</button>
+            <button class="btn btn-outline-primary" id="optionD">D</button>
+            <button class="btn btn-outline-primary" id="optionE">E</button>
+        </div>
+        <div class="navigation">
+            <div class="time" id="time">Time: <span id="timeLeft">60</span>s</div>
+            <div>
+                <button class="btn btn-secondary" id="prevBtn">&lt;</button>
+                <button class="btn btn-secondary" id="nextBtn">&gt;</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script/solve_questions.js"></script>
+</body>
+</html>

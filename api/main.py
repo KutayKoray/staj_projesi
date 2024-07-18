@@ -11,6 +11,8 @@ from pydantic import BaseModel
 from fastapi import File, UploadFile
 import os
 import shutil
+from sqlalchemy.sql.expression import func
+
 
 
 
@@ -26,7 +28,6 @@ class QuestionModel(Base):
 
     soru_id = Column(Integer, primary_key=True, index=True)
     alan_bilgisi = Column(String, index=True)
-    soru_turu = Column(String, index=True)
     soru_dersi = Column(String, index=True)
     correct_answer = Column(String)
     image_file_name = Column(String)
@@ -68,7 +69,6 @@ class RegisterUser(LoginUser):
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
-    soru_turu: str
     soru_dersi: str
     correct_answer: str
     image_file_name: str
@@ -188,6 +188,19 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
     if question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
+
+@app.get("/questions/category/{soru_dersi}/{soru_adedi}")
+def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_db)):
+    questions = (
+        db.query(QuestionModel)
+        .filter(QuestionModel.soru_dersi == soru_dersi)
+        .order_by(func.random())
+        .limit(soru_adedi)
+        .all()
+    )
+    if not questions:
+        raise HTTPException(status_code=404, detail="Sorular bulunamadı")
+    return questions
 
 # Katekoriye göre soruları listeleme
 @app.get("/questions/category/{soru_turu}")
