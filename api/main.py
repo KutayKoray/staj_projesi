@@ -28,6 +28,7 @@ class QuestionModel(Base):
 
     soru_id = Column(Integer, primary_key=True, index=True)
     alan_bilgisi = Column(String, index=True)
+    soru_turu = Column(String, index=True)
     soru_dersi = Column(String, index=True)
     correct_answer = Column(String)
     image_file_name = Column(String)
@@ -59,13 +60,24 @@ class LoginUser(BaseModel):
     password: str
 
 class RegisterUser(LoginUser):
+    username: str
+    password: str
     name: str
     surname: str
-    username: str
     e_mail: str
     is_teacher: bool
     is_student: bool
-    password: str
+
+# Soru modeli
+class QuestionModel(Base):
+    __tablename__ = "questions"
+
+    soru_id = Column(Integer, primary_key=True, index=True)
+    alan_bilgisi = Column(String, index=True)
+    soru_turu = Column(String, index=True)
+    soru_dersi = Column(String, index=True)
+    correct_answer = Column(String)
+    image_file_name = Column(String)
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
@@ -74,8 +86,11 @@ class QuestionSchema(BaseModel):
     image_file_name: str
 
 class QuestionUpdate(BaseModel):
-    pass
-
+    alan_bilgisi: str
+    soru_turu: str
+    soru_dersi: str
+    correct_answer: str
+    image_file_name: str
 
 # Veritabanı oluşturma
 Base.metadata.create_all(engine)
@@ -129,6 +144,16 @@ def register_post(user: RegisterUser, db: Session = Depends(get_db)):
     db.refresh(db_question)
     return db_question
 
+# Kullanıcı giriş
+@app.post("/login/", response_model=LoginUser)
+def login_post(user: LoginUser, db: Session = Depends(get_db), response: Response = None):
+    db_user = db.query(UserModel).filter(UserModel.username == user.username).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    if db_user.password != user.password:
+        raise HTTPException(status_code=404, detail="Şifre hatalı")
+    return db_user
+
 # Kullanıcı listeleme
 @app.get("/users/")
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -153,19 +178,30 @@ def delete_user(username: str, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Kullanıcı başarıyla silindi"}
 
-
-# Kullanıcı giriş
-@app.post("/login/", response_model=LoginUser)
-def login_post(user: LoginUser, db: Session = Depends(get_db), response: Response = None):
-    db_user = db.query(UserModel).filter(UserModel.username == user.username).first()
+# Veri tabanından kullanıcının scorunu güncelleme
+@app.put("/users/{username}/score")
+def update_user_score(username: str, score_update: ScoreUpdate, db: Session = Depends(get_db)):
+    db_user = db.query(UserModel).filter(UserModel.username == username).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
-    if db_user.password != user.password:
-        raise HTTPException(status_code=404, detail="Şifre hatalı")
     
-    return db_user
+    db_user.total_question += score_update.total_question
+    db_user.correct_answer += score_update.correct_answer
+    db_user.wrong_answer += score_update.wrong_answer
+    db_user.score += score_update.score
     
-
+    db.commit()
+    db.refresh(db_user)
+    return {
+        "message": "Kullanıcı istatistikleri başarıyla güncellendi",
+        "new_stats": {
+            "total_question": db_user.total_question,
+            "correct_answer": db_user.correct_answer,
+            "wrong_answer": db_user.wrong_answer,
+            "score": db_user.score
+        }
+    }
+    
 # Soru ekleme
 @app.post("/questions/", response_model=QuestionSchema)
 def create_question(question: QuestionSchema, db: Session = Depends(get_db)):
@@ -181,7 +217,7 @@ def read_questions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     questions = db.query(QuestionModel).offset(skip).limit(limit).all()
     return questions
 
-# Belirli bir soruyu alma
+# Soruyu id üzerinde çağırma
 @app.get("/questions/{soru_id}")
 def read_question(soru_id: int, db: Session = Depends(get_db)):
     question = db.query(QuestionModel).filter(QuestionModel.soru_id == soru_id).first()
@@ -189,23 +225,18 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
-@app.get("/questions/category/{soru_dersi}/{soru_adedi}")
-def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_db)):
-    questions = (
-        db.query(QuestionModel)
-        .filter(QuestionModel.soru_dersi == soru_dersi)
-        .order_by(func.random())
-        .limit(soru_adedi)
-        .all()
-    )
-    if not questions:
-        raise HTTPException(status_code=404, detail="Sorular bulunamadı")
-    return questions
-
 # Katekoriye göre soruları listeleme
 @app.get("/questions/category/{soru_turu}")
 def read_question(soru_turu: str, db: Session = Depends(get_db)):
     question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
+    if question is None:
+        raise HTTPException(status_code=404, detail="Soru bulunamadı")
+    return question
+
+# Soruyu ders üzerinde çağırma
+@app.get("/questions/category/{soru_dersi}")
+def read_question(soru_dersi: str, db: Session = Depends(get_db)):
+    question = db.query(QuestionModel).filter(QuestionModel.soru_dersi == soru_dersi).all()
     if question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
@@ -232,30 +263,3 @@ def delete_question(soru_id: int, db: Session = Depends(get_db)):
     db.delete(question)
     db.commit()
     return {"message": "Soru başarıyla silindi"}
-
-# Veri tabanından kullanıcının scorunu güncelleme
-@app.put("/users/{username}/score")
-def update_user_score(username: str, score_update: ScoreUpdate, db: Session = Depends(get_db)):
-    db_user = db.query(UserModel).filter(UserModel.username == username).first()
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
-    
-    db_user.total_question += score_update.total_question
-    db_user.correct_answer += score_update.correct_answer
-    db_user.wrong_answer += score_update.wrong_answer
-    db_user.score += score_update.score
-    
-    db.commit()
-    db.refresh(db_user)
-    return {
-        "message": "Kullanıcı istatistikleri başarıyla güncellendi",
-        "new_stats": {
-            "total_question": db_user.total_question,
-            "correct_answer": db_user.correct_answer,
-            "wrong_answer": db_user.wrong_answer,
-            "score": db_user.score
-        }
-    }
-
-
-
