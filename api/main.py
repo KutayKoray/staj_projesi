@@ -109,11 +109,8 @@ def get_db():
 @app.post("/upload_file")
 async def upload_file(dosya_yukle: UploadFile = File(...)):
     try:
-        # Create an 'uploads' directory if it doesn't exist
-        os.makedirs("uploads", exist_ok=True)
-        
         # Save the file
-        file_path = f"uploads/{dosya_yukle.filename}"
+        file_path = f"web/uploads/{dosya_yukle.filename}"
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(dosya_yukle.file, buffer)
         
