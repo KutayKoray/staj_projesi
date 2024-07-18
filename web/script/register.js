@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registerButton = document.getElementById('registerButton');
-    registerForm.addEventListener('submit', async (event) => {
+    registerButton.addEventListener('click', async (event) => {
         event.preventDefault();
 
         const formData = new FormData(registerForm);

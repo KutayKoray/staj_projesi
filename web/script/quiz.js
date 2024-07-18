@@ -63,48 +63,15 @@ function updateSoruTuru() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const categoryContainer = document.getElementById('categoryContainer');
-    const questionsContainer = document.getElementById('questionsContainer');
-    const categoryTitle = document.getElementById('categoryTitle');
-    const questionList = document.getElementById('questionList');
+    const button = document.getElementById('submitBtn');
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let timer;
-    const QUESTION_TIME = 30; // saniye cinsinden
-    const CORRECT_ANSWER_POINTS = 10;
-    let questions = [];
-    let user = localStorage.getItem('username');
-    let totalQuestions = 0;
-    let correctAnswers = 0;
-    let wrongAnswers = 0;
-
+    button.addEventListener('click', () => {
+    // butona basıldınğında soru çözme sayfasına yönlendirme yapılacak
     
-
-    categoryContainer.addEventListener('click', async (event) => {
-        if (event.target.classList.contains('category')) {
-            const category = event.target.dataset.category;
-            categoryTitle.textContent = category;
-            
-            // Hangi soru_turu seçecek sor
-
-}});
+    });
 
 
-
-            
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
+// bu fonksiyonu diğer sayfaya taşıyabiliriz
 function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user) {
     fetch(`http://localhost:8000/users/${user}/score`, {
         method: 'PUT',
@@ -133,7 +100,7 @@ function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, 
         alert('Kullanıcı istatistikleri güncellenirken bir hata oluştu.');
     });
 }
-
+// bu fonksiyonu diğer sayfaya taşıyabiliriz
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }});
