@@ -1,20 +1,15 @@
-from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
-from fastapi import FastAPI, HTTPException, Depends
-from starlette.middleware.sessions import SessionMiddleware
-from pydantic import BaseModel
-from fastapi import File, UploadFile
-import os
-import shutil
-from sqlalchemy.sql.expression import func
-
-
-
+import os # type: ignore
+import shutil # type: ignore
+from pydantic import BaseModel # type: ignore
+from sqlalchemy.sql.expression import func # type: ignore
+from sqlalchemy.orm import sessionmaker, Session # type: ignore
+from sqlalchemy.ext.declarative import declarative_base # type: ignore
+from starlette.middleware.sessions import SessionMiddleware # type: ignore
+from sqlalchemy import create_engine, Column, Integer, String, Boolean # type: ignore
+from fastapi import File, UploadFile # type: ignore
+from fastapi.responses import Response # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi import FastAPI, HTTPException, Depends # type: ignore
 
 # Veritabanı bağlantısı ORM
 SQLALCHEMY_DATABASE_URL = "sqlite:///./quiz.db"
@@ -22,16 +17,6 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Soru modeli
-class QuestionModel(Base):
-    __tablename__ = "questions"
-
-    soru_id = Column(Integer, primary_key=True, index=True)
-    alan_bilgisi = Column(String, index=True)
-
-    soru_dersi = Column(String, index=True)
-    correct_answer = Column(String)
-    image_file_name = Column(String)
 # User Modeli
 class UserModel(Base):
     __tablename__ = "users"
@@ -60,13 +45,22 @@ class LoginUser(BaseModel):
     password: str
 
 class RegisterUser(LoginUser):
-    username: str
-    password: str
     name: str
     surname: str
     e_mail: str
     is_teacher: bool
     is_student: bool
+
+# Soru modeli
+class QuestionModel(Base):
+    __tablename__ = "questions"
+
+    soru_id = Column(Integer, primary_key=True, index=True)
+    alan_bilgisi = Column(String, index=True)
+
+    soru_dersi = Column(String, index=True)
+    correct_answer = Column(String)
+    image_file_name = Column(String)
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
