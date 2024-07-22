@@ -1,6 +1,5 @@
 import os # type: ignore
 import shutil # type: ignore
-from typing import Optional # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.sql.expression import func # type: ignore
 from sqlalchemy.orm import sessionmaker, Session # type: ignore
@@ -163,6 +162,13 @@ def read_user(username: str, db: Session = Depends(get_db)):
     if user is None:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
     return user
+
+@app.get("/scores")
+def read_user_scores(db: Session = Depends(get_db)):
+    users = db.query(UserModel).order_by(UserModel.score.desc()).all()
+    if not users:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    return [{"username": user.username, "score": user.score} for user in users]
 
 # Kullanıcı silme
 @app.delete("/users/{username}")

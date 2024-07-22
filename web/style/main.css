@@ -26,6 +26,12 @@ body {
     width: 50%;
 }
 
+.soruCoz {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .question-form-container {
     width: 100%;
 }
@@ -37,8 +43,8 @@ body {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    overflow-y: auto;  
-    max-height: 400px;  
+    overflow-y: auto;
+    max-height: 400px;
 }
 
 h1 {
@@ -93,6 +99,6 @@ button:hover {
 .question-card {
     padding: 20px;
     border-radius: 20px;
-    border: #333, solid 1px;
+    border: 1px solid #333;
     margin-bottom: 20px;
 }
