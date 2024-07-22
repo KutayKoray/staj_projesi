@@ -1,4 +1,4 @@
-import requests
+import requests # type: ignore
 
 url = "http://localhost:8000/questions/"
 

@@ -172,7 +172,7 @@ function displayQuestion(question) {
         <div class="">
         <h2>${counter}. Soru</h2>
         <br>
-        <img src="./uploads/${question.image_file_name}" 
+        <img src="/uploads/${question.image_file_name}" 
              alt="Soru resmi" 
              onerror="this.onerror=null; this.src='path/to/error/image.jpg'; this.alt='Resim yüklenemedi';"
              style="width: 100%; height: auto;">

@@ -40,7 +40,6 @@ async function loadQuestions() {
             card.innerHTML = `
                 <h3>id = ${question.soru_id}</h3>
                 <h3>${question.alan_bilgisi}</h3>
-                <h3>${question.soru_turu}</h3>
                 <h3>${question.soru_dersi}</h3>
                 <p>${question.image_file_name}</p>
                 <p>Doğru Cevap: ${question.correct_answer}</p>
