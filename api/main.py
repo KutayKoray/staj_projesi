@@ -1,5 +1,6 @@
 import os # type: ignore
 import shutil # type: ignore
+from typing import Optional # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.sql.expression import func # type: ignore
 from sqlalchemy.orm import sessionmaker, Session # type: ignore
@@ -8,6 +9,7 @@ from starlette.middleware.sessions import SessionMiddleware # type: ignore
 from sqlalchemy import create_engine, Column, Integer, String, Boolean # type: ignore
 from fastapi import File, UploadFile # type: ignore
 from fastapi.responses import Response # type: ignore
+from fastapi.staticfiles import StaticFiles # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from fastapi import FastAPI, HTTPException, Depends # type: ignore
 
@@ -57,7 +59,6 @@ class QuestionModel(Base):
 
     soru_id = Column(Integer, primary_key=True, index=True)
     alan_bilgisi = Column(String, index=True)
-
     soru_dersi = Column(String, index=True)
     correct_answer = Column(String)
     image_file_name = Column(String)
@@ -85,7 +86,7 @@ app.add_middleware(SessionMiddleware, secret_key="hdisigorta")
 # CORS ayarları
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Bu sadece test için. Güvenlik için spesifik domainler ekleyin.
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -100,17 +101,33 @@ def get_db():
         db.close()
 
 # Dosya yükleme
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 @app.post("/upload_file")
-async def upload_file(dosya_yukle: UploadFile = File(...)):
+async def upload_file(dosya_yukle: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
-        # Save the file
-        file_path = f"web/uploads/{dosya_yukle.filename}"
+        # Yeni bir ID almak için get_next_question_id fonksiyonunu çağır
+        next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()
+        next_id = (next_id_result or 0) + 1
+        
+        # Dosya adını oluştur
+        file_extension = os.path.splitext(dosya_yukle.filename)[1]
+        new_filename = f"question_{next_id}{file_extension}"
+        file_path = os.path.join(UPLOAD_DIR, new_filename)
+        
+        # Dosyayı kaydet
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(dosya_yukle.file, buffer)
         
-        return {"filename": dosya_yukle.filename, "message": "File uploaded successfully"}
+        return {"filename": new_filename, "message": "File uploaded successfully"}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": f"Dosya yükleme hatası: {str(e)}"}
 
 # Kullanıcı kayıt
 @app.post("/register/", response_model=RegisterUser)
@@ -205,14 +222,15 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
-# Katekoriye göre soruları listeleme
-@app.get("/questions/category/{soru_turu}")
-def read_question(soru_turu: str, db: Session = Depends(get_db)):
-    question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
+# Soruyu ders üzerinde çağırma
+@app.get("/questions/category/{soru_dersi}")
+def read_question(soru_dersi: str, db: Session = Depends(get_db)):
+    question = db.query(QuestionModel).filter(QuestionModel.soru_dersi == soru_dersi).all()
     if question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
+# Soruyu istenilen ders ve istenilen soru adedi çağırma
 @app.get("/questions/category/{soru_dersi}/{soru_adedi}")
 def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_db)):
     questions = (
@@ -225,14 +243,6 @@ def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_d
     if not questions:
         raise HTTPException(status_code=404, detail="Sorular bulunamadı")
     return questions
-
-# Soruyu ders üzerinde çağırma
-@app.get("/questions/category/{soru_dersi}")
-def read_question(soru_dersi: str, db: Session = Depends(get_db)):
-    question = db.query(QuestionModel).filter(QuestionModel.soru_dersi == soru_dersi).all()
-    if question is None:
-        raise HTTPException(status_code=404, detail="Soru bulunamadı")
-    return question
 
 # Soru güncelleme
 @app.put("/questions/{soru_id}", response_model=QuestionSchema)
@@ -256,3 +266,30 @@ def delete_question(soru_id: int, db: Session = Depends(get_db)):
     db.delete(question)
     db.commit()
     return {"message": "Soru başarıyla silindi"}
+
+# Bütün soruları silme
+@app.delete("/questions/delete_all/delete")
+def delete_all_questions(db: Session = Depends(get_db)):
+    questions = db.query(QuestionModel).all()
+    if not questions:
+        raise HTTPException(status_code=404, detail="Hiçbir soru bulunamadı")
+    
+    try:
+        for question in questions:
+            db.delete(question)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Bir hata oluştu: {str(e)}")
+    
+    return {"message": "Tüm sorular başarıyla silindi"}
+
+@app.get("/questions/get_next_id/next_id")
+async def get_next_question_id(db: Session = Depends(get_db)):
+    try:
+        next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()
+        next_id = (next_id_result or 0) + 1
+        
+        return {"next_id": next_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
