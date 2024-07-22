@@ -25,10 +25,10 @@ class QuestionModel(Base):
 
     soru_id = Column(Integer, primary_key=True, index=True)
     alan_bilgisi = Column(String, index=True)
-
     soru_dersi = Column(String, index=True)
     correct_answer = Column(String)
     image_file_name = Column(String)
+
 # User Modeli
 class UserModel(Base):
     __tablename__ = "users"
@@ -62,16 +62,6 @@ class RegisterUser(LoginUser):
     e_mail: str
     is_teacher: bool
     is_student: bool
-
-# Soru modeli
-class QuestionModel(Base):
-    __tablename__ = "questions"
-
-    soru_id = Column(Integer, primary_key=True, index=True)
-    alan_bilgisi = Column(String, index=True)
-    soru_dersi = Column(String, index=True)
-    correct_answer = Column(String)
-    image_file_name = Column(String)
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
