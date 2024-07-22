@@ -165,6 +165,13 @@ def read_user(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
     return user
 
+@app.get("/scores")
+def read_user_scores(db: Session = Depends(get_db)):
+    users = db.query(UserModel).order_by(UserModel.score.desc()).all()
+    if not users:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    return [{"username": user.username, "score": user.score} for user in users]
+
 # Kullanıcı silme
 @app.delete("/users/{username}")
 def delete_user(username: str, db: Session = Depends(get_db)):

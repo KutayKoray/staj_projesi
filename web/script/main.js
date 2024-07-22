@@ -58,7 +58,6 @@ window.onload = async function() {
     await loadQuestions();
 };
 
-
 document.getElementById('soruCozButton').addEventListener('click', function() {
     const page = '/web/quiz.html';
     window.location.href = page;
@@ -66,5 +65,10 @@ document.getElementById('soruCozButton').addEventListener('click', function() {
 
 document.getElementById('addTestButton').addEventListener('click', function() {
     const page = '/web/add_test.html';
+    window.location.href = page;
+});
+
+document.getElementById('scoreBoardButton').addEventListener('click', function() {
+    const page = '/web/new_feature.html';
     window.location.href = page;
 });
