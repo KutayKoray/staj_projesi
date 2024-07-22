@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # SQLite database
-quiz.db
+*.db
 
 # Distribution / packaging
 .Python
