@@ -1,6 +1,5 @@
 import os # type: ignore
 import shutil # type: ignore
-from typing import Optional # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.sql.expression import func # type: ignore
 from sqlalchemy.orm import sessionmaker, Session # type: ignore
@@ -71,7 +70,6 @@ class QuestionSchema(BaseModel):
 
 class QuestionUpdate(BaseModel):
     alan_bilgisi: str
-    soru_turu: str
     soru_dersi: str
     correct_answer: str
     image_file_name: str

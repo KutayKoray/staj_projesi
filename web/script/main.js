@@ -19,6 +19,14 @@ async function fetchProfile() {
             <p><strong>Email:</strong> ${user.e_mail}</p>
             <p><strong>Role:</strong> ${user.is_teacher ? 'Teacher' : 'Student'}</p>
         `;
+
+        // Check user role and hide button if user is a student
+        const addTestButton = document.getElementById('addTestButton');
+        if (!user.is_teacher) { // user.is_teacher is 0 if user is a student
+            addTestButton.style.display = 'none'; // Hide the button
+        } else {
+            addTestButton.style.display = 'block'; // Show the button
+        }
     } catch (error) {
         console.error('Error fetching profile:', error);
         alert('An error occurred while fetching the profile.');
@@ -58,6 +66,11 @@ window.onload = async function() {
     await loadQuestions();
 };
 
+document.getElementById('scoreBoardButton').addEventListener('click', function() {
+    const page = '/web/score_board.html';
+    window.location.href = page;
+});
+
 document.getElementById('soruCozButton').addEventListener('click', function() {
     const page = '/web/quiz.html';
     window.location.href = page;
@@ -65,10 +78,5 @@ document.getElementById('soruCozButton').addEventListener('click', function() {
 
 document.getElementById('addTestButton').addEventListener('click', function() {
     const page = '/web/add_test.html';
-    window.location.href = page;
-});
-
-document.getElementById('scoreBoardButton').addEventListener('click', function() {
-    const page = '/web/new_feature.html';
     window.location.href = page;
 });
