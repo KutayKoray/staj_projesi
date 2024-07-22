@@ -28,10 +28,10 @@ class QuestionModel(Base):
 
     soru_id = Column(Integer, primary_key=True, index=True)
     alan_bilgisi = Column(String, index=True)
-
     soru_dersi = Column(String, index=True)
     correct_answer = Column(String)
     image_file_name = Column(String)
+
 # User Modeli
 class UserModel(Base):
     __tablename__ = "users"
@@ -76,7 +76,6 @@ class QuestionSchema(BaseModel):
 
 class QuestionUpdate(BaseModel):
     alan_bilgisi: str
-    soru_turu: str
     soru_dersi: str
     correct_answer: str
     image_file_name: str
@@ -211,14 +210,7 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
-# Katekoriye göre soruları listeleme
-@app.get("/questions/category/{soru_turu}")
-def read_question(soru_turu: str, db: Session = Depends(get_db)):
-    question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
-    if question is None:
-        raise HTTPException(status_code=404, detail="Soru bulunamadı")
-    return question
-
+# Soruyu ders ve soru adedi üzerinde çağırma 
 @app.get("/questions/category/{soru_dersi}/{soru_adedi}")
 def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_db)):
     questions = (
