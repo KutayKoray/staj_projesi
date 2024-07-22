@@ -86,7 +86,7 @@ app.add_middleware(SessionMiddleware, secret_key="hdisigorta")
 # CORS ayarları
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5500","http://127.0.0.1:5500"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -244,6 +244,16 @@ def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_d
         raise HTTPException(status_code=404, detail="Sorular bulunamadı")
     return questions
 
+@app.get("/questions/get_next_id/next_id")
+async def get_next_question_id(db: Session = Depends(get_db)):
+    try:
+        next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()
+        next_id = (next_id_result or 0) + 1
+        
+        return {"next_id": next_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Soru güncelleme
 @app.put("/questions/{soru_id}", response_model=QuestionSchema)
 def update_question(soru_id: int, question: QuestionUpdate, db: Session = Depends(get_db)):
@@ -283,13 +293,3 @@ def delete_all_questions(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Bir hata oluştu: {str(e)}")
     
     return {"message": "Tüm sorular başarıyla silindi"}
-
-@app.get("/questions/get_next_id/next_id")
-async def get_next_question_id(db: Session = Depends(get_db)):
-    try:
-        next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()
-        next_id = (next_id_result or 0) + 1
-        
-        return {"next_id": next_id}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
