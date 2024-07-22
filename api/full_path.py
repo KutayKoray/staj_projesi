@@ -1,4 +1,4 @@
-import os
+import os # type: ignore
 
 # Mevcut çalışma dizinini al
 current_dir = os.getcwd()
