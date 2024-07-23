@@ -1,11 +1,12 @@
 import os # type: ignore
 import shutil # type: ignore
+from typing import List # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.sql.expression import func # type: ignore
 from sqlalchemy.orm import sessionmaker, Session # type: ignore
 from sqlalchemy.ext.declarative import declarative_base # type: ignore
 from starlette.middleware.sessions import SessionMiddleware # type: ignore
-from sqlalchemy import create_engine, Column, Integer, String, Boolean # type: ignore
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, JSON # type: ignore
 from fastapi import File, UploadFile # type: ignore
 from fastapi.responses import Response # type: ignore
 from fastapi.staticfiles import StaticFiles # type: ignore
@@ -44,12 +45,7 @@ class UserModel(Base):
     correct_answer = Column(Integer, default=0)
     wrong_answer = Column(Integer, default=0)
     score = Column(Integer, default=0)
-
-class ScoreUpdate(BaseModel):
-    total_question: int
-    correct_answer: int
-    wrong_answer: int
-    score: int
+    wrong_questions = Column(JSON, default=[])
 
 class LoginUser(BaseModel):
     username: str
@@ -61,6 +57,14 @@ class RegisterUser(LoginUser):
     e_mail: str
     is_teacher: bool
     is_student: bool
+
+class UpdateScore(BaseModel):
+    total_question: int
+    correct_answer: int
+    wrong_answer: int
+    score: int
+    wrong_questions: List[int] = []
+
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
@@ -182,16 +186,21 @@ def delete_user(username: str, db: Session = Depends(get_db)):
 
 # Veri tabanından kullanıcının scorunu güncelleme
 @app.put("/users/{username}/score")
-def update_user_score(username: str, score_update: ScoreUpdate, db: Session = Depends(get_db)):
+def update_user_score(username: str, score_update: UpdateScore, db: Session = Depends(get_db)):
     db_user = db.query(UserModel).filter(UserModel.username == username).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
     
+    # Update statistics
     db_user.total_question += score_update.total_question
     db_user.correct_answer += score_update.correct_answer
     db_user.wrong_answer += score_update.wrong_answer
     db_user.score += score_update.score
-    
+
+    # Update wrong questions
+    if score_update.wrong_questions:
+        db_user.wrong_questions = score_update.wrong_questions
+
     db.commit()
     db.refresh(db_user)
     return {
@@ -200,7 +209,8 @@ def update_user_score(username: str, score_update: ScoreUpdate, db: Session = De
             "total_question": db_user.total_question,
             "correct_answer": db_user.correct_answer,
             "wrong_answer": db_user.wrong_answer,
-            "score": db_user.score
+            "score": db_user.score,
+            "wrong_questions": db_user.wrong_questions
         }
     }
     
@@ -248,6 +258,7 @@ def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_d
         raise HTTPException(status_code=404, detail="Sorular bulunamadı")
     return questions
 
+# Sonraki sorunun idsini gönderme
 @app.get("/questions/get_next_id/next_id")
 async def get_next_question_id(db: Session = Depends(get_db)):
     try:
@@ -257,6 +268,21 @@ async def get_next_question_id(db: Session = Depends(get_db)):
         return {"next_id": next_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Kullanıcının yanlış yapılan sorularını gönderme
+@app.get("/users/{username}/wrong_questions")
+def get_wrong_questions(username: str, db: Session = Depends(get_db)):
+    db_user = db.query(UserModel).filter(UserModel.username == username).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+
+    wrong_questions_ids = db_user.wrong_questions
+    if not wrong_questions_ids:
+        return {"message": "Yanlış yapılan soru bulunamadı"}
+    
+    wrong_questions = db.query(QuestionModel).filter(QuestionModel.soru_id.in_(wrong_questions_ids)).all()
+    
+    return wrong_questions
 
 # Soru güncelleme
 @app.put("/questions/{soru_id}", response_model=QuestionSchema)

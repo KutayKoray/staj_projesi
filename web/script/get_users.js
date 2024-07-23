@@ -11,9 +11,10 @@ async function fetchUsers() {
 
         users.forEach(user => {
             const row = document.createElement('tr');
+            const wrongQuestions = user.wrong_questions ? user.wrong_questions.join(', ') : '';
 
             row.innerHTML = `
-                <td>${user.user_id}</td>
+                <td>${user.user_id || 0}</td>
                 <td>${user.name || ''}</td>
                 <td>${user.surname || ''}</td>
                 <td>${user.username || ''}</td>
@@ -23,6 +24,7 @@ async function fetchUsers() {
                 <td>${user.correct_answer || 0}</td>
                 <td>${user.wrong_answer || 0}</td>
                 <td>${user.score || 0}</td>
+                <td>${wrongQuestions || 0}</td>
             `;
 
             tbody.appendChild(row);

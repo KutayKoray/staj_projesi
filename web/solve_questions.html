@@ -21,14 +21,14 @@
         <div class="navigation">
             <div class="time" id="time">Time: <span id="timeLeft">60</span>s</div>
             <div>
-                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()"></button>
-                <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()"></button>
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Geri</button>
+                <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()">İleri</button>
             </div>
         </div>
         <button id="openModalBtn">Show Stats</button>
     </div>
 
-        <!-- Modal yapısı -->
+    <!-- Modal yapısı -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -37,13 +37,14 @@
             <ul id="statsList">
                 <!-- Stats bilgileri buraya eklenecek -->
             </ul>
+            <!-- Yanlış soruları göstermek için bir alan -->
+            <div id="incorrectQuestionsList">
+                <!-- Yanlış sorular buraya eklenecek -->
+            </div>
         </div>
     </div>
 
-    <button id="hiddenButton" onclick="goto_main_menu()" >Go To Main Page</button>
-
-
-    
+    <button id="hiddenButton" onclick="goto_main_menu()">Go To Main Page</button>
 
     <script src="./script/solve_questions.js"></script>
 </body>

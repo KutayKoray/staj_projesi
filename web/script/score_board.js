@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function fetchScores() {
-    fetch('http://localhost:8000/scores')  // API endpoint URL
+    fetch('http://localhost:8000/scores')
         .then(response => response.json())
         .then(data => {
             const tableBody = document.querySelector("#scoreTable tbody");
-            tableBody.innerHTML = "";  // Clear any existing rows
+            tableBody.innerHTML = "";
 
             data.forEach((user, index) => {
                 const row = document.createElement("tr");
