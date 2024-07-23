@@ -19,6 +19,16 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# Soru modeli
+class QuestionModel(Base):
+    __tablename__ = "questions"
+
+    soru_id = Column(Integer, primary_key=True, index=True)
+    alan_bilgisi = Column(String, index=True)
+    soru_dersi = Column(String, index=True)
+    correct_answer = Column(String)
+    image_file_name = Column(String)
+
 # User Modeli
 class UserModel(Base):
     __tablename__ = "users"
@@ -55,15 +65,6 @@ class UpdateScore(BaseModel):
     score: int
     wrong_questions: List[int] = []
 
-# Soru modeli
-class QuestionModel(Base):
-    __tablename__ = "questions"
-
-    soru_id = Column(Integer, primary_key=True, index=True)
-    alan_bilgisi = Column(String, index=True)
-    soru_dersi = Column(String, index=True)
-    correct_answer = Column(String)
-    image_file_name = Column(String)
 
 class QuestionSchema(BaseModel):
     alan_bilgisi: str
@@ -236,15 +237,14 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
-# Soruyu ders üzerinde çağırma
-@app.get("/questions/category/{soru_dersi}")
-def read_question(soru_dersi: str, db: Session = Depends(get_db)):
-    question = db.query(QuestionModel).filter(QuestionModel.soru_dersi == soru_dersi).all()
+# Katekoriye göre soruları listeleme
+@app.get("/questions/category/{soru_turu}")
+def read_question(soru_turu: str, db: Session = Depends(get_db)):
+    question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
     if question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     return question
 
-# Soruyu istenilen ders ve istenilen soru adedi çağırma
 @app.get("/questions/category/{soru_dersi}/{soru_adedi}")
 def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_db)):
     questions = (
