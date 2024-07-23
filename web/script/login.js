@@ -1,5 +1,5 @@
 document.getElementById('registerBtn').addEventListener('click', () => {
-    window.location.href = 'http://localhost:5500/web/register.html';
+    window.location.href = '/web/register.html';
 });
 
 const loginForm = document.getElementById('login-form');
@@ -24,7 +24,7 @@ const loginForm = document.getElementById('login-form');
             if (response.status == 200) {
                 alert('Login successful');
                 localStorage.setItem('username', username);
-                window.location.href = 'http://localhost:5500/web/main.html';
+                window.location.href = '/web/main.html';
             } else {
                 alert('Login failed');
             }

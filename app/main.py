@@ -88,7 +88,7 @@ app.add_middleware(SessionMiddleware, secret_key="hdisigorta")
 # CORS ayarları
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5500","http://127.0.0.1:5500"],
+    allow_origins=["http://localhost:5500","http://127.0.0.1:5500","http://localhost:5501","http://127.0.0.1:5501","http://localhost:8080","http://localhost:8000", "http://192.168.65.1:8080", "http://192.168.65.1", "http://0.0.0.0:8080"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -104,12 +104,10 @@ def get_db():
 
 # Dosya yükleme
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+UPLOAD_DIR = os.path.join(BASE_DIR, "app/uploads")
 
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
-
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 @app.post("/upload_file")
 async def upload_file(dosya_yukle: UploadFile = File(...), db: Session = Depends(get_db)):

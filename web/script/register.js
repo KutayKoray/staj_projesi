@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+
     const registerButton = document.getElementById('registerButton');
     registerButton.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 alert('User registered successfully!');
-                window.location.href = 'http://localhost:5500/web/login.html';
+                window.location.href = '/web/login.html';
+                
             } else {
                 alert(`Error: ${responseData.detail}`);
             }
@@ -37,4 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while registering the user.');
         }
     });
-});
+
