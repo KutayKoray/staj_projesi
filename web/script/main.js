@@ -13,19 +13,15 @@ async function fetchProfile() {
         const user = await response.json();
         const profileInfo = document.getElementById('profileInfo');
         profileInfo.innerHTML = `
-            <p><strong>Name:</strong> ${user.name}</p>
-            <p><strong>Surname:</strong> ${user.surname}</p>
             <p><strong>Username:</strong> ${user.username}</p>
-            <p><strong>Email:</strong> ${user.e_mail}</p>
             <p><strong>Role:</strong> ${user.is_teacher ? 'Teacher' : 'Student'}</p>
         `;
 
-        // Check user role and hide button if user is a student
         const addTestButton = document.getElementById('addTestButton');
-        if (!user.is_teacher) { // user.is_teacher is 0 if user is a student
-            addTestButton.style.display = 'none'; // Hide the button
+        if (!user.is_teacher) {
+            addTestButton.style.display = 'none';
         } else {
-            addTestButton.style.display = 'block'; // Show the button
+            addTestButton.style.display = 'block';
         }
     } catch (error) {
         console.error('Error fetching profile:', error);
