@@ -102,6 +102,11 @@ def get_db():
     finally:
         db.close()
 
+# Sağlık kontrolü
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 # Dosya yükleme
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOAD_DIR = os.path.join(BASE_DIR, "app/uploads")
