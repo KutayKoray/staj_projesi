@@ -10,9 +10,9 @@
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-primary text-white">
                         <h2>Quiz</h2>
                     </div>
                     <div class="card-body">
@@ -33,14 +33,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="soru_adedi">3. Soru Sayısı</label><br>
-                                <input type="number" id="soru_adedi" placeholder="Çözmek istediğiniz soru sayısı">
+                                <input type="number" class="form-control" id="soru_adedi" placeholder="Çözmek istediğiniz soru sayısı">
                             </div>
-                            <button type="button" class="btn btn-primary" id="submitBtn">Soruları Çöz</button>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">Geri</button>
+                                <button type="button" class="btn btn-primary" id="submitBtn">Soruları Çöz</button>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <div id="questionsContainer" class="card mt-3" style="display: none;">
-                    <div class="card-header text-center">
+                <div id="questionsContainer" class="card mt-4 shadow-sm" style="display: none;">
+                    <div class="card-header text-center bg-success text-white">
                         <h2 id="categoryTitle"></h2>
                     </div>
                     <div class="card-body">

@@ -10,9 +10,9 @@
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-primary text-white">
                         <h2 class="card-title">Soru Ekle</h2>
                     </div>
                     <div class="card-body">
@@ -39,7 +39,10 @@
                                 <label for="dogru_cevap">Doğru Cevap:</label>
                                 <input type="text" class="form-control" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
                             </div>
-                            <button type="button" class="btn btn-primary" id="submitBtn">Soruyu Ekle</button>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">Geri</button>
+                                <button type="button" class="btn btn-primary" id="submitBtn">Soruyu Ekle</button>
+                            </div>
                         </form>
                     </div>
                 </div>
