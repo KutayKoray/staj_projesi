@@ -45,3 +45,4 @@ Technologies used in the project:
 # Katkıda bulunma
 *Diğer kullanıcıların ve geliştiricilerin kodunuzu daha iyi hale getirmek için nasıl katkıda bulunabileceklerini açıklayın.*
 
+# docker compose up --build
