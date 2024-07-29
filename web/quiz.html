@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/quiz.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h2>Quiz</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="alan_bilgisi">1. Alan Seçiniz:</label>
+                                <select class="form-control" id="alan_bilgisi" name="alan_bilgisi" onchange="updateSoruTuru()">
+                                    <option value="" disabled selected>TYT mi AYT mi seçiniz</option>
+                                    <option value="TYT">TYT</option>
+                                    <option value="AYT">AYT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="soru_dersi">2. Soru Dersini Seçiniz:</label>
+                                <select class="form-control" id="soru_dersi" name="soru_dersi">
+                                    <option value="" disabled selected>Soru dersi seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="soru_adedi">3. Soru Sayısı</label><br>
+                                <input type="number" class="form-control" id="soru_adedi" placeholder="Çözmek istediğiniz soru sayısı">
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">Geri</button>
+                                <button type="button" class="btn btn-primary" id="submitBtn">Soruları Çöz</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="questionsContainer" class="card mt-4 shadow-sm" style="display: none;">
+                    <div class="card-header text-center bg-success text-white">
+                        <h2 id="categoryTitle"></h2>
+                    </div>
+                    <div class="card-body">
+                        <ul id="questionList" class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="./script/quiz.js"></script>
+</body>
+</html>

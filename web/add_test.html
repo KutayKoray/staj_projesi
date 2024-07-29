@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soru Ekle</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style/add_test.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h2 class="card-title">Soru Ekle</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="alan_bilgisi">1. Alan Seçiniz:</label>
+                                <select class="form-control" id="alan_bilgisi" name="alan_bilgisi" onchange="updateSoruTuru()">
+                                    <option value="" disabled selected>TYT mi AYT mi seçiniz</option>
+                                    <option value="TYT">TYT</option>
+                                    <option value="AYT">AYT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="soru_dersi">2. Soru Dersini Seçiniz:</label>
+                                <select class="form-control" id="soru_dersi" name="soru_dersi">
+                                    <option value="" disabled selected>Soru dersi seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dosya_yukle">Resim Yükle (Sadece resim dosyaları):</label>
+                                <input type="file" class="form-control-file" id="dosya_yukle" name="dosya_yukle" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label for="dogru_cevap">Doğru Cevap:</label>
+                                <input type="text" class="form-control" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">Geri</button>
+                                <button type="button" class="btn btn-primary" id="submitBtn">Soruyu Ekle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-5">
+                <!-- Diğer içerikler -->
+            
+                <!-- Bildirim Alanı -->
+                <div id="notification" class="alert alert-success d-none" role="alert">
+                    Soru başarıyla eklendi!
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script/add_test.js"></script>
+</body>
+</html>

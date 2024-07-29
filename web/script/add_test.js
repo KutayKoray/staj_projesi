@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+const submitBtn = document.getElementById('submitBtn');
+const notification = document.getElementById('notification');
+
+>>>>>>> develop
 function updateSoruTuru() {
     var alanBilgisi = document.getElementById('alan_bilgisi').value;
     var soruDersiSelect = document.getElementById('soru_dersi');
@@ -47,7 +53,11 @@ document.getElementById('submitBtn').addEventListener('click', async function (e
             const errorText = await uploadResponse.text();
             throw new Error(`Dosya yükleme hatası: ${errorText}`);
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> develop
         console.log('Dosya başarıyla yüklendi.');
 
         // Soru eklemek için gerekli bilgileri al
@@ -87,7 +97,16 @@ document.getElementById('submitBtn').addEventListener('click', async function (e
             throw new Error(`Soru eklerken hata: ${errorData.detail}`);
         }
 
+<<<<<<< HEAD
         console.log('Soru başarıyla eklendi:', data);
+=======
+        notification.classList.remove('d-none');
+
+        setTimeout(function() {
+            notification.classList.add('d-none');
+        }, 3000);
+        
+>>>>>>> develop
 
     } catch (error) {
         console.error('Hata:', error);

@@ -13,11 +13,19 @@ let counter = 1;
 let nextBtn = document.getElementById('nextBtn');
 let previousBtn = document.getElementById('prevBtn');
 nextBtn.innerText = 'İleri';
+<<<<<<< HEAD
 prevBtn.innerText = 'Geri';
 
 // veri tabanından istenen dersin sorularını istenen adette çek ve questions id içine yazdır.
 let questions_ids = [];
 let current_question = 0;
+=======
+previousBtn.innerText = 'Geri';
+
+let questions_ids = [];
+let current_question = 0;
+let incorrect_question_ids = []; 
+>>>>>>> develop
 
 async function getQuestions() {
     try {
@@ -30,7 +38,10 @@ async function getQuestions() {
          // Gelen verileri questions_ids array'ine ekle
          questions_ids = questions.map(question => question.soru_id);
     
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
         console.log('questions_ids:', questions_ids);
         console.log('current_question:', questions_ids[current_question]);
 
@@ -43,9 +54,12 @@ async function getQuestions() {
 }
 getQuestions();
 
+<<<<<<< HEAD
 
 
 // -veri tabanından id'ye göre soru çekilecek
+=======
+>>>>>>> develop
 async function getQuestionById(soruId) {
     try {
         const response = await fetch(`http://localhost:8000/questions/${soruId}`);
@@ -67,6 +81,7 @@ async function getQuestionById(soruId) {
     }
 }
 
+<<<<<<< HEAD
 //ileri ok tuşuna basıldığında bir sonraki soru ekana yazdırılacak
 
 function nextQuestion() {
@@ -77,19 +92,31 @@ function nextQuestion() {
     }
     if (counter < questions_ids.length) {
 
+=======
+function nextQuestion() {
+    if (counter + 1 == questions_ids.length) {
+        nextBtn.innerText = 'Bitir';
+    }
+    if (counter < questions_ids.length) {
+>>>>>>> develop
         current_question++;
         counter++;
         getQuestionById(questions_ids[current_question]);
     } else {
+<<<<<<< HEAD
         // sınav bittiğinde user_answers listesini kontrol et ardından doğru ve yanlış sayılarını belirle sonra veri tabanına güncelleme yap
         finishExam();
 
+=======
+        finishExam();
+>>>>>>> develop
     }
 }
 
 function finishExam() {
     handle_user_answers();
     display_stats();
+<<<<<<< HEAD
 
     alert('Sınav bitti!');
     // burada ana sayfaya yönlendiren bir buton oluştur.
@@ -98,12 +125,23 @@ function finishExam() {
 
 
 
+=======
+    displayIncorrectQuestions();
+
+    alert('Sınav bitti!');
+    hiddenButton.click();
+
+>>>>>>> develop
     console.log('Doğru cevap sayısı:', correct_answers);
     console.log('Yanlış cevap sayısı:', wrong_answers);
     console.log('Toplam soru sayısı:', total_questions);
     console.log('Skor:', score);
 
+<<<<<<< HEAD
     update_user_stats(total_questions, correct_answers, wrong_answers, score, user);
+=======
+    update_user_stats(total_questions, correct_answers, wrong_answers, score, user, incorrect_question_ids);
+>>>>>>> develop
 }
 
 function goto_main_menu() {
@@ -150,8 +188,11 @@ function display_stats() {
     `;
 }
 
+<<<<<<< HEAD
 //geri ok tuşuna basıldığında bir önceki soru ekrana yazdırılacak
 
+=======
+>>>>>>> develop
 function previousQuestion() {
     counter--;
     if (counter < questions_ids.length) {
@@ -165,7 +206,10 @@ function previousQuestion() {
     }
 }
 
+<<<<<<< HEAD
 // -sorular ekrana yazdırılacak
+=======
+>>>>>>> develop
 function displayQuestion(question) {
     const questionContainer = document.getElementById('question');
     questionContainer.innerHTML = `
@@ -180,9 +224,12 @@ function displayQuestion(question) {
     `;
 }
 
+<<<<<<< HEAD
 
 // -kullanıcın işaretlediği cevaplar alınacak kaydedilecek sınav bittiğinde kontrol edilip doğru ve yanlış scor sayısı belirlenecek. Bunun için bir veri tipi oluşturulacak her sorunun id'si, sorunun correct_answer bilgisi ve kullanıcın işaretlediği cevaplar bu veri tipine kaydedilecek ve bu veri tipini tutacak bir liste oluşturulacak. En sonda bu liste ile doğru ve yanlış sayısı belirlenecek
 
+=======
+>>>>>>> develop
 let user_answers = [];
 
 document.querySelectorAll(".btn").forEach(button => {
@@ -236,6 +283,7 @@ function getLatestAnswers(answers) {
 }
 
 function handle_user_answers() {
+<<<<<<< HEAD
     
     getLatestAnswers(user_answers).forEach(answer => {
         if (answer.correct_answer === answer.user_answer) {
@@ -244,6 +292,18 @@ function handle_user_answers() {
         } else {
             wrong_answers++;
             score -= 1;
+=======
+    getLatestAnswers(user_answers).forEach(answer => {
+        if (answer.correct_answer === answer.user_answer) {
+            correct_answers++;
+            score += 4;
+        } else {
+            wrong_answers++;
+            score -= 1;
+            if (!incorrect_question_ids.includes(answer.question_id)) {
+                incorrect_question_ids.push(answer.question_id);
+            }
+>>>>>>> develop
         }
         total_questions++;
     });
@@ -252,11 +312,18 @@ function handle_user_answers() {
     console.log('wrong_answers:', wrong_answers);
     console.log('total_questions:', total_questions);
     console.log('score:', score);
+<<<<<<< HEAD
 
 }
 
 function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user) {
     
+=======
+    console.log('incorrect_question_ids:', incorrect_question_ids);
+}
+
+function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user, wrongQuestions) {
+>>>>>>> develop
     fetch(`http://localhost:8000/users/${user}/score`, {
         method: 'PUT',
         headers: {
@@ -266,7 +333,12 @@ function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, 
             total_question: totalQuestions,
             correct_answer: correctAnswers,
             wrong_answer: wrongAnswers,
+<<<<<<< HEAD
             score: score
+=======
+            score: score,
+            wrong_questions: wrongQuestions
+>>>>>>> develop
         }),
     })
     .then(response => {
@@ -287,4 +359,18 @@ function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, 
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+<<<<<<< HEAD
 };
+=======
+}
+
+function displayIncorrectQuestions() {
+    const incorrectQuestionsList = document.getElementById('incorrectQuestionsList');
+    incorrectQuestionsList.innerHTML = `
+        <h3>Yanlış Yapılan Sorular:</h3>
+        <ul>
+            ${incorrect_question_ids.map(id => `<li>Soru ID: ${id}</li>`).join('')}
+        </ul>
+    `;
+}
+>>>>>>> develop

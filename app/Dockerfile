@@ -2,7 +2,10 @@ FROM python:3.12.1
 
 WORKDIR /app
 
+<<<<<<< HEAD
 COPY requirements.txt .
+=======
+>>>>>>> develop
 COPY ./ ./
 
 RUN pip install --no-cache-dir -r requirements.txt

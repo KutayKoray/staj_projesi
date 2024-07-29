@@ -9,6 +9,14 @@ services:
     volumes:
       - ./uploads:/app/uploads
       - ./quiz.db:/app/quiz.db
+<<<<<<< HEAD
+=======
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+>>>>>>> develop
 
   frontend:
     build:
@@ -18,4 +26,10 @@ services:
       - "8080:8080"
     volumes:
       - ./uploads:/web/uploads
+<<<<<<< HEAD
+=======
+    depends_on:
+      backend:
+        condition: service_healthy
+>>>>>>> develop
   
