@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
     fetchScores();
+
+    const quizButton = document.getElementById("quizButton");
+    quizButton.addEventListener("click", function() {
+        window.location.href = "http://127.0.0.1:5500/web/quiz.html";
+    });
 });
 
 function fetchScores() {
