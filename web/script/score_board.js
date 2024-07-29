@@ -3,16 +3,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const quizButton = document.getElementById("quizButton");
     quizButton.addEventListener("click", function() {
-        window.location.href = "http://127.0.0.1:5500/web/quiz.html";
+        window.location.href = "/web/quiz.html";
     });
 });
 
 function fetchScores() {
-    fetch('http://localhost:8000/scores')
-        .then(response => response.json())
+    fetch('http://localhost:8000/users')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             const tableBody = document.querySelector("#scoreTable tbody");
             tableBody.innerHTML = "";
+
+            data.sort((a, b) => b.score - a.score);
 
             data.forEach((user, index) => {
                 const row = document.createElement("tr");
