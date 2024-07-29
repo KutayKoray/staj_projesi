@@ -111,11 +111,14 @@ def health_check():
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOAD_DIR = os.path.join(BASE_DIR, "app/uploads")
 
-if not os.path.exists(UPLOAD_DIR):
-    os.makedirs(UPLOAD_DIR)
+
 
 @app.post("/upload_file")
 async def upload_file(dosya_yukle: UploadFile = File(...), db: Session = Depends(get_db)):
+
+    if not os.path.exists(UPLOAD_DIR):
+        os.makedirs(UPLOAD_DIR)
+
     try:
         # Yeni bir ID almak için get_next_question_id fonksiyonunu çağır
         next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()

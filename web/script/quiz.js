@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         alert('Soruları çözmeye başlayabilirsiniz!');
 
-        window.location.href = 'http://127.0.0.1:5500/web/solve_questions.html';
+        window.location.href = '/web/solve_questions.html';
     });
 });
 

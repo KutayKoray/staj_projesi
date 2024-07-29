@@ -1,3 +1,29 @@
+// Profil dropdown fonksiyonelliği
+document.addEventListener('DOMContentLoaded', function() {
+    var dropdownToggle = document.querySelector('.dropdown-toggle');
+    dropdownToggle.addEventListener('click', function() {
+        this.classList.toggle('show');
+    });
+});
+
+// Sidebar toggle fonksiyonelliği (mobil görünüm için)
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('show');
+}
+
+// Sayfa yüklendiğinde çalışacak kod
+window.addEventListener('DOMContentLoaded', (event) => {
+    // Aktif menü öğesini vurgulama
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach((link) => {
+        link.addEventListener('click', function() {
+            navLinks.forEach((el) => el.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+
 async function fetchProfile() {
     const username = localStorage.getItem('username');
     try {
@@ -11,10 +37,9 @@ async function fetchProfile() {
         }
 
         const user = await response.json();
-        const profileInfo = document.getElementById('profileInfo');
+        const profileInfo = document.getElementById('username');
         profileInfo.innerHTML = `
-            <p><strong>Username:</strong> ${user.username}</p>
-            <p><strong>Role:</strong> ${user.is_teacher ? 'Teacher' : 'Student'}</p>
+            <p><strong></strong> ${user.username}</p>
         `;
 
         const addTestButton = document.getElementById('addTestButton');
@@ -29,38 +54,10 @@ async function fetchProfile() {
     }
 }
 
-async function loadQuestions() {
-    try {
-        const response = await fetch('http://localhost:8000/questions/');
-        const questions = await response.json();
-        
-        const container = document.getElementById('questionsContainer');
-        container.innerHTML = '<h2>Veritabanındaki Sorular</h2>';
-        
-        questions.forEach(question => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            
-            card.innerHTML = `
-                <h3>id = ${question.soru_id}</h3>
-                <h3>${question.alan_bilgisi}</h3>
-                <h3>${question.soru_dersi}</h3>
-                <p>${question.image_file_name}</p>
-                <p>Doğru Cevap: ${question.correct_answer}</p>
-            `;
-            
-            container.appendChild(card);
-        });
-    } catch (error) {
-        console.error('Error loading questions:', error);
-        alert('Sorular yüklenirken bir hata oluştu.');
-    }
-}
-
 window.onload = async function() {
     await fetchProfile();
-    await loadQuestions();
 };
+
 
 document.getElementById('scoreBoardButton').addEventListener('click', function() {
     const page = '/web/score_board.html';
@@ -76,3 +73,16 @@ document.getElementById('addTestButton').addEventListener('click', function() {
     const page = '/web/add_test.html';
     window.location.href = page;
 });
+
+document.getElementById('Logout').addEventListener('click', function() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('soruAdedi');
+    localStorage.removeItem('soruDersi');
+    window.location.href = '/web/login.html';
+});
+
+document.getElementById('Profil').addEventListener('click', function() {
+    const page = '/web/user_profile.html';
+    window.location.href = page;
+});
+

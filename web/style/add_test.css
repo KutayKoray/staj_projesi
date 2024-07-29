@@ -67,3 +67,15 @@ body {
 .card-header.bg-primary {
     background-color: #007bff;
 }
+
+#notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+.d-none {
+    display: none;
+}

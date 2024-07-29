@@ -11,6 +11,10 @@ async function fetchProfile() {
         }
 
         const user = await response.json();
+
+        const profile_username = document.getElementById('profile_username');
+        profile_username.innerHTML = user.username;
+
         const profileInfo = document.getElementById('profileInfo');
         profileInfo.innerHTML = `
             <p><strong>Username:</strong> ${user.username}</p>
@@ -41,12 +45,11 @@ async function loadWrongQuestions() {
         const wrongQuestions = user.wrong_questions || [];
 
         if (wrongQuestions.length === 0) {
-            document.getElementById('questionsContainer').innerHTML = '<h2>Yanlış yapılan soru bulunmamaktadır.</h2>';
+            document.getElementById('questionsList').innerHTML = '<h2>Yanlış yapılan soru bulunmamaktadır.</h2>';
             return;
         }
 
-        const container = document.getElementById('questionsContainer');
-        container.innerHTML = '<h2>Yanlış yapılan sorular</h2>';
+        const container = document.getElementById('questionsList');
         
         for (const questionId of wrongQuestions) {
             const questionResponse = await fetch(`http://localhost:8000/questions/${questionId}`);
@@ -60,11 +63,12 @@ async function loadWrongQuestions() {
             card.className = 'question-card';
             
             card.innerHTML = `
-                <h3>id = ${question.soru_id}</h3>
-                <h3>${question.alan_bilgisi}</h3>
-                <h3>${question.soru_dersi}</h3>
-                <p>${question.image_file_name}</p>
-                <p>Doğru Cevap: ${question.correct_answer}</p>
+                <div style="border: 3px solid #ccc; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <h3>id = ${question.soru_id}</h3>
+                    <p>${question.alan_bilgisi}</p>
+                    <p>${question.soru_dersi}</p>
+                    <p>Doğru Cevap: ${question.correct_answer}</p>
+                </div>
             `;
             
             container.appendChild(card);
@@ -79,3 +83,19 @@ window.onload = async function() {
     await fetchProfile();
     await loadWrongQuestions();
 };
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggleQuestions');
+    const questionsList = document.getElementById('questionsList');
+
+    toggleButton.addEventListener('click', function() {
+        questionsList.classList.toggle('hidden');
+        
+        if (questionsList.classList.contains('hidden')) {
+            toggleButton.textContent = 'Yanlış Sorularım';
+        } else {
+            toggleButton.textContent = 'Yanlış Soruları Gizle';
+        }
+    });
+});
