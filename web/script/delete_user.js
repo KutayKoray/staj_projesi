@@ -58,7 +58,7 @@ async function deleteUser() {
 
 async function deleteAllUsers() {
     try {
-        const response = await fetch('http://localhost:8000/users/delete_all/delete_users', {
+        const response = await fetch('http://localhost:8000/users/delete_all_users', {
             method: 'DELETE',
         });
 

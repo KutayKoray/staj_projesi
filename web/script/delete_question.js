@@ -58,7 +58,7 @@ function deleteQuestion() {
 function deleteAllQuestions() {
     const message = document.getElementById('message');
     
-    fetch('http://localhost:8000/questions/delete_all/delete_questions', {
+    fetch('http://localhost:8000/questions/delete_all_questions', {
         method: 'DELETE',
     })
     .then(response => {

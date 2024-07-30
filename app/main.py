@@ -1,15 +1,18 @@
 import os # type: ignore
+import time # type: ignore
 import shutil # type: ignore
+import requests # type: ignore
+import threading # type: ignore
 from typing import List # type: ignore
 from pydantic import BaseModel # type: ignore
+from datetime import datetime, timedelta # type: ignore
+from starlette.middleware.sessions import SessionMiddleware # type: ignore
 from sqlalchemy.sql.expression import func # type: ignore
 from sqlalchemy.orm import sessionmaker, Session # type: ignore
 from sqlalchemy.ext.declarative import declarative_base # type: ignore
-from starlette.middleware.sessions import SessionMiddleware # type: ignore
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, JSON # type: ignore
 from fastapi import File, UploadFile # type: ignore
 from fastapi.responses import Response # type: ignore
-from fastapi.staticfiles import StaticFiles # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from fastapi import FastAPI, HTTPException, Depends # type: ignore
 
@@ -113,7 +116,7 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "app/uploads")
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-@app.post("/upload_file")
+@app.post("/upload_question_file")
 async def upload_file(dosya_yukle: UploadFile = File(...), db: Session = Depends(get_db)):
     
     try:
@@ -131,6 +134,29 @@ async def upload_file(dosya_yukle: UploadFile = File(...), db: Session = Depends
     
     except Exception as e:
         return {"error": f"Dosya yükleme hatası: {str(e)}"}
+    
+# Dosya yükleme
+#BASE_DIR_EC = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#UPLOAD_DIR_EC = os.path.join(BASE_DIR_EC, "app/user_uploads")
+#
+#if not os.path.exists(UPLOAD_DIR_EC):
+#    os.makedirs(UPLOAD_DIR_EC)
+#
+#@app.post("/user_profile_upload_file")
+#async def upload_file(dosya_yukle: UploadFile = File(...), sender_name: str = "default_name", db: Session = Depends(get_db)):
+#
+#    try:
+#        file_extension = os.path.splitext(dosya_yukle.filename)[1]
+#        new_filename = f"{sender_name}_{file_extension}"
+#        file_path = os.path.join(UPLOAD_DIR_EC, new_filename)
+#        
+#        with open(file_path, "wb") as buffer:
+#            shutil.copyfileobj(dosya_yukle.file, buffer)
+#        
+#        return {"filename": new_filename, "message": "File uploaded successfully"}
+#    
+#    except Exception as e:
+#        return {"error": f"Dosya yükleme hatası: {str(e)}"}
 
 # Kullanıcı kayıt
 @app.post("/register/", response_model=RegisterUser)
@@ -174,20 +200,20 @@ def read_user(username: str, db: Session = Depends(get_db)):
     return user
 
 # Kullanıcının yanlış yapılan sorularını gönderme
-@app.get("/users/{username}/wrong_questions")
-def get_wrong_questions(username: str, db: Session = Depends(get_db)):
-    db_user = db.query(UserModel).filter(UserModel.username == username).first()
-
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
-
-    wrong_questions_ids = db_user.wrong_questions
-    if not wrong_questions_ids:
-        return {"message": "Yanlış yapılan soru bulunamadı"}
-    
-    wrong_questions = db.query(QuestionModel).filter(QuestionModel.soru_id.in_(wrong_questions_ids)).all()
-    
-    return wrong_questions
+#@app.get("/users/{username}/wrong_questions")
+#def get_wrong_questions(username: str, db: Session = Depends(get_db)):
+#    db_user = db.query(UserModel).filter(UserModel.username == username).first()
+#
+#    if db_user is None:
+#      raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+#
+#    wrong_questions_ids = db_user.wrong_questions
+#    if not wrong_questions_ids:
+#        return {"message": "Yanlış yapılan soru bulunamadı"}
+#    
+#    wrong_questions = db.query(QuestionModel).filter(QuestionModel.soru_id.in_(wrong_questions_ids)).all()
+#    
+#    return wrong_questions
 
 # Kullanıcı skorlarını bastırma
 @app.get("/users/score")
@@ -200,7 +226,7 @@ def read_user_scores(db: Session = Depends(get_db)):
 
 
 # Veri tabanından kullanıcının scorunu güncelleme
-@app.put("/users/{username}/score")
+@app.put("/users/{username}/update_user_score")
 def update_user_score(username: str, score_update: UpdateScore, db: Session = Depends(get_db)):
     db_user = db.query(UserModel).filter(UserModel.username == username).first()
 
@@ -229,7 +255,7 @@ def update_user_score(username: str, score_update: UpdateScore, db: Session = De
     }
 
 # Kullanıcı skorunu sıfırlama
-@app.put("/users/{username}/reset_score")
+@app.put("/users/{username}/reset_user_score")
 def reset_user_score(username: str, db: Session = Depends(get_db)):
     db_user = db.query(UserModel).filter(UserModel.username == username).first()
 
@@ -256,8 +282,8 @@ def reset_user_score(username: str, db: Session = Depends(get_db)):
         }
     }
 
-# Bütün kullanıcı skorlarını sıfırlama
-@app.put("/users/reset_all_score/reset_score")
+# Bütün kullanıcıların verilerini sıfırlama
+@app.put("/users/reset_all_users_score")
 def reset_all_user_scores(db: Session = Depends(get_db)):
     db_users = db.query(UserModel).all()
 
@@ -275,6 +301,59 @@ def reset_all_user_scores(db: Session = Depends(get_db)):
 
     return {"message": "Tüm kullanıcıların istatistikleri başarıyla sıfırlandı"}
 
+# Bütün kullanıcıların skorlarını sıfırlama
+@app.put("/users/reset_all_users_score/reset_score")
+def reset_all_user_scores(db: Session = Depends(get_db)):
+    db_users = db.query(UserModel).all()
+
+    if not db_users:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+
+    for db_user in db_users:
+        db_user.score = 0
+
+    db.commit()
+
+    return {"message": "Tüm kullanıcıların istatistikleri başarıyla sıfırlandı"}
+
+RESET_SCORE_URL = "http://localhost:8000/users/reset_all_users_score/reset_score"
+
+def get_next_run_time():
+    now = datetime.now()
+    current_day_of_week = now.weekday()
+    
+    days_until_sunday = (6 - current_day_of_week + 7) % 7
+    next_sunday = now + timedelta(days=days_until_sunday)
+    
+    next_run_time = next_sunday.replace(hour=23, minute=59, second=59, microsecond=59)
+    
+    if now > next_run_time:
+        next_run_time += timedelta(weeks=1)
+    
+    return next_run_time
+
+def reset_scores():
+    while True:
+        now = datetime.now()
+        next_run_time = get_next_run_time()
+        
+        sleep_duration = (next_run_time - now).total_seconds()
+        print(f"Bir sonraki sıfırlama zamanı: {next_run_time}")
+        time.sleep(sleep_duration)
+        
+        try:
+            response = requests.put(RESET_SCORE_URL)
+            if response.status_code == 200:
+                print("Kullanıcı verileri başarıyla sıfırlandı")
+            else:
+                print(f"Bir hata oluştu: {response.text}")
+        except Exception as e:
+            print(f"Bir hata oluştu: {e}")
+
+thread = threading.Thread(target=reset_scores)
+thread.daemon = True
+thread.start()
+
 # Kullanıcı silme
 @app.delete("/users/{username}/delete")
 def delete_user(username: str, db: Session = Depends(get_db)):
@@ -287,7 +366,8 @@ def delete_user(username: str, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Kullanıcı başarıyla silindi"}
 
-@app.delete("/users/delete_all/delete_users")
+# Tüm kullanıcıları silme
+@app.delete("/users/delete_all_users")
 def delete_all_users(db: Session = Depends(get_db)):
     users = db.query(UserModel).all()
 
@@ -325,13 +405,13 @@ def read_question(soru_id: int, db: Session = Depends(get_db)):
     return question
 
 # Katekoriye göre soruları listeleme
-@app.get("/questions/category/{soru_turu}")
-def read_question(soru_turu: str, db: Session = Depends(get_db)):
-    question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
-
-    if question is None:
-        raise HTTPException(status_code=404, detail="Soru bulunamadı")
-    return question
+#@app.get("/questions/category/{soru_turu}")
+#def read_question(soru_turu: str, db: Session = Depends(get_db)):
+#    question = db.query(QuestionModel).filter(QuestionModel.soru_turu == soru_turu).all()
+#
+#    if question is None:
+#        raise HTTPException(status_code=404, detail="Soru bulunamadı")
+#    return question
 
 # Katekoriye göre soruları gönderme
 @app.get("/questions/category/{soru_dersi}/{soru_adedi}")
@@ -348,8 +428,9 @@ def read_questions(soru_dersi: str, soru_adedi: int, db: Session = Depends(get_d
     return questions
 
 # Sonraki sorunun idsini gönderme
-@app.get("/questions/get_next_id/next_id")
+@app.get("/questions/category/get_next_id")
 async def get_next_question_id(db: Session = Depends(get_db)):
+    
     try:
         next_id_result = db.query(func.max(QuestionModel.soru_id)).scalar()
         next_id = (next_id_result or 0) + 1
@@ -362,10 +443,12 @@ async def get_next_question_id(db: Session = Depends(get_db)):
 @app.put("/questions/{soru_id}", response_model=QuestionSchema)
 def update_question(soru_id: int, question: QuestionUpdate, db: Session = Depends(get_db)):
     db_question = db.query(QuestionModel).filter(QuestionModel.soru_id == soru_id).first()
+
     if db_question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     for var, value in vars(question).items():
         setattr(db_question, var, value) if value else None
+
     db.add(db_question)
     db.commit()
     db.refresh(db_question)
@@ -375,6 +458,7 @@ def update_question(soru_id: int, question: QuestionUpdate, db: Session = Depend
 @app.delete("/questions/{soru_id}/delete")
 def delete_question(soru_id: int, db: Session = Depends(get_db)):
     question = db.query(QuestionModel).filter(QuestionModel.soru_id == soru_id).first()
+
     if question is None:
         raise HTTPException(status_code=404, detail="Soru bulunamadı")
     
@@ -401,9 +485,10 @@ def delete_question(soru_id: int, db: Session = Depends(get_db)):
     return {"message": "Soru ve dosya başarıyla silindi"}
 
 # Bütün soruları silme
-@app.delete("/questions/delete_all/delete_questions")
+@app.delete("/questions/delete_all_questions")
 def delete_all_questions(db: Session = Depends(get_db)):
     questions = db.query(QuestionModel).all()
+
     if not questions:
         raise HTTPException(status_code=404, detail="Hiçbir soru bulunamadı")
     try:
