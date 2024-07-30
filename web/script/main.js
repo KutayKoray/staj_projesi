@@ -12,7 +12,7 @@ function toggleSidebar() {
     sidebar.classList.toggle('show');
 }
 
-// Sayfa yüklendiğinde çalışacak kod
+// Sayfa yüklendiğinde çalışac  ak kod
 window.addEventListener('DOMContentLoaded', (event) => {
     // Aktif menü öğesini vurgulama
     const navLinks = document.querySelectorAll('.nav-link');
