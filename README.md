@@ -45,7 +45,7 @@ For any questions or support, please contact us at [kutay.koray@hotmail.com](mai
 <h2>Proje durumu ve belgeleri</h2>
 
 - Projeye başlarken kullanılacak belgeler:
-    - ✅ [Proje / konu isterleri ve önerileri (Requests for Comments (RFC))](RFC/readme.md)
+    - ✅ [Proje / konu isterleri ve önerileri (Requests for Comments (RFC))](./RFC)
 
 <h2>🧐 Features</h2>
 
