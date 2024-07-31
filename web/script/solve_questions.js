@@ -238,7 +238,7 @@ function handle_user_answers() {
 }
 
 function update_user_stats(totalQuestions, correctAnswers, wrongAnswers, score, user, wrongQuestions) {
-    fetch(`http://localhost:8000/users/${user}/score`, {
+    fetch(`http://localhost:8000/users/${user}/update_user_score`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

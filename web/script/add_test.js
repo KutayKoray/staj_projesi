@@ -41,7 +41,7 @@ document.getElementById('submitBtn').addEventListener('click', async function (e
         formData.append('dosya_yukle', fileField.files[0]);
 
         // Dosya yükleme işlemi için fetch
-        const uploadResponse = await fetch('http://localhost:8000/upload_file', {
+        const uploadResponse = await fetch('http://localhost:8000/upload_question_file', {
             method: 'POST',
             body: formData
         });
@@ -59,7 +59,7 @@ document.getElementById('submitBtn').addEventListener('click', async function (e
         var dogru_cevap = document.getElementById('dogru_cevap').value;
 
         // Sorunun id'sini almak için bir istek yap
-        const questionIdResponse = await fetch('http://localhost:8000/questions/get_next_id/next_id');
+        const questionIdResponse = await fetch('http://localhost:8000/questions/category/get_next_id');
         if (!questionIdResponse.ok) {
             throw new Error('Sorunun ID’si alınamadı.');
         }
