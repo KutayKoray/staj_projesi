@@ -20,7 +20,7 @@ To get started with the Quizer project, follow these steps:
    <pre><code>cd Staj_Project</code></pre>
 
 4. **If you dont have Dcoker install**:
-   <pre><a hrfef="https://www.docker.com/products/docker-desktop/">Install Docker</a></pre>
+   <pre><a href="https://www.docker.com/products/docker-desktop/">Install Docker</a></pre>
 
 5. **Run the Application**:
    - **Docker:**
