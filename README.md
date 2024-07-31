@@ -19,12 +19,10 @@ To get started with the Quizer project, follow these steps:
 3. **Navigate to Project Directory**:
    <pre><code>cd Staj_Project</code></pre>
 
-4. **Install Dependencies**:
-   <pre><code>pip install -r requirements.txt</code></pre>
+4. **If you dont have Dcoker install**:
+   <pre><a hrfef="https://www.docker.com/products/docker-desktop/">Install Docker</a></pre>
 
 5. **Run the Application**:
-   - **Python:**
-     <pre><code>fastapi dev api/main.py</code></pre>
    - **Docker:**
      <pre><code>docker compose up --build</code></pre>
 
@@ -59,9 +57,7 @@ Here're some of the project's best features:
 *   Competing with other users
 
 <h2>🛠️ Installation Steps:</h2>
-
-1. Install the latest Python version.
-2. Download Docker.
+1. Download Docker.
 
 <h2>💻 Built with</h2>
 
