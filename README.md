@@ -1,6 +1,6 @@
 <h1 align="center" id="title">Quizer</h1>
 
-<p align="center"><img src="https://socialify.git.ci/Erdem006/Staj_Project/image?description=1&amp;descriptionEditable=Online%20Quiz%20Application&amp;font=Rokkitt&amp;name=1&amp;pattern=Circuit%20Board&amp;theme=Dark" alt="project-image"></p>
+<p align="center"><img src="https://socialify.git.ci/KutayKoray/staj_projesi/image?description=1&descriptionEditable=Quiz%20Application%20For%20Students&forks=1&name=1&owner=1&pattern=Circuit%20Board&theme=Dark" alt="staj_projesi" width="640" height="320" /></p>
 
 <p id="description">Quiz application for teachers and students. We have developed this application to improve our understanding about web services and API.</p>
 
