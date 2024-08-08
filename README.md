@@ -73,7 +73,3 @@ Technologies used in the project:
 *   JavaScript
 *   Docker
 
-<h2>Contributing</h2>
-
-Other users and developers can contribute to improving the code in various ways. If you would like to contribute to the project, you can fork the repository and propose your changes through pull requests. This process allows you to share your contributions to the project and receive feedback from the community.
-
