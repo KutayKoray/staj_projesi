@@ -45,7 +45,7 @@ For any questions or support, please contact us at [kutay.koray@hotmail.com](mai
 - Projeye başlarken kullanılacak belgeler:
     - ✅ [Proje / konu isterleri ve önerileri (Requests for Comments (RFC))](./RFC)
 
->>>>>>> releaseV1
+
 <h2>🧐 Features</h2>
 
 Here're some of the project's best features:
