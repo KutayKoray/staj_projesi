@@ -7,6 +7,10 @@ body {
     height: 100vh;
     margin: 0;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> releaseV1
 .login-container {
     background-color: #fff;
     padding: 20px;
@@ -15,18 +19,34 @@ body {
     width: 300px;
     text-align: center;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> releaseV1
 .login-container h2 {
     margin-bottom: 20px;
     color: #333;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> releaseV1
 .login-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+<<<<<<< HEAD
 .login-form label {
     margin-bottom: 10px;
 }
+=======
+
+.login-form label {
+    margin-bottom: 10px;
+}
+
+>>>>>>> releaseV1
 .login-form input[type="text"],
 .login-form input[type="password"] {
     width: 100%;
@@ -36,16 +56,52 @@ body {
     border-radius: 4px;
     box-sizing: border-box;
 }
+<<<<<<< HEAD
 .login-form button {
     width: 100%;
     padding: 10px;
     background-color: #4CAF50;
     color: white;
+=======
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+>>>>>>> releaseV1
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+<<<<<<< HEAD
 }
 .login-form button:hover {
     background-color: #45a049;
+=======
+    margin-bottom: 10px;
+    color: white;
+    background-color: #4CAF50;
+}
+
+.login-form button:hover {
+    background-color: #45a049;
+}
+
+.signup-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.signup-link p {
+    margin: 0;
+}
+
+.signup-link a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+>>>>>>> releaseV1
 }

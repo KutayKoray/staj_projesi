@@ -3,30 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-<<<<<<< HEAD
-    <link rel="stylesheet" href="./style/quiz.css">
-</head>
-<body>
-    <div class="container" id="categoryContainer">
-        <div class="category" data-category="Spor">Spor</div>
-        <div class="category" data-category="Bilim">Bilim</div>
-        <div class="category" data-category="Sanat">Sanat</div>
-        <div class="category" data-category="Tarih">Tarih</div>
-        <div class="category" data-category="Coğrafya">Coğrafya</div>
-        <div class="category" data-category="Eğlence">Eğlence</div>
-    </div>
-    <div id="questionsContainer" class="questions-container" style="display: none;">
-        <h2 id="categoryTitle"></h2>
-        <ul id="questionList" class="question-list"></ul>
-    </div>
-
-    <script src="./script/quiz.js"></script>
-</body>
-</html>
-=======
+    <title>Soru Ekle</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./style/quiz.css">
+    <link rel="stylesheet" href="style/add_test.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -34,7 +13,7 @@
             <div class="col-md-8">
                 <div class="card shadow-sm">
                     <div class="card-header text-center bg-primary text-white">
-                        <h2>Quiz</h2>
+                        <h2 class="card-title">Soru Ekle</h2>
                     </div>
                     <div class="card-body">
                         <form>
@@ -53,32 +32,37 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="soru_adedi">3. Soru Sayısı</label><br>
-                                <input type="number" class="form-control" id="soru_adedi" placeholder="Çözmek istediğiniz soru sayısı">
+                                <label for="dosya_yukle">Resim Yükle (Sadece resim dosyaları):</label>
+                                <input type="file" class="form-control-file" id="dosya_yukle" name="dosya_yukle" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label for="dogru_cevap">Doğru Cevap:</label>
+                                <input type="text" class="form-control" id="dogru_cevap" name="dogru_cevap" placeholder="Doğru cevabı giriniz">
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" onclick="history.back()">Geri</button>
-                                <button type="button" class="btn btn-primary" id="submitBtn">Soruları Çöz</button>
+                                <button type="button" class="btn btn-primary" id="submitBtn">Soruyu Ekle</button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div id="questionsContainer" class="card mt-4 shadow-sm" style="display: none;">
-                    <div class="card-header text-center bg-success text-white">
-                        <h2 id="categoryTitle"></h2>
-                    </div>
-                    <div class="card-body">
-                        <ul id="questionList" class="list-group"></ul>
-                    </div>
+            </div>
+
+            <div class="container mt-5">
+                <!-- Diğer içerikler -->
+            
+                <!-- Bildirim Alanı -->
+                <div id="notification" class="alert alert-success d-none" role="alert">
+                    Soru başarıyla eklendi!
                 </div>
             </div>
+
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="./script/quiz.js"></script>
+    <script src="script/add_test.js"></script>
 </body>
 </html>
->>>>>>> releaseV1
